@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal Jurídico - Panel de Control</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 950px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 { color: #1a2e40; margin-bottom: 5px; }
+        .subtitle { color: #666; margin-bottom: 25px; }
+        
+        /* Estilo del Formulario de Captura */
+        .form-captura {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 180px;
+        }
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .btn-agregar {
+            background-color: #1a2e40;
+            color: white;
+            border: none;
+            padding: 11px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .btn-agregar:hover { background-color: #0f1c28; }
+
+        /* Estilo de la Tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #1a2e40;
+            color: white;
+            font-weight: 600;
+        }
+        .btn-ver {
+            background-color: #c5a059;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-ver:hover { background-color: #a88444; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Bufete Jurídico Agüero & Asociados</h1>
+        <p class="subtitle">Panel de Administración de Expedientes del Bufete.</p>
+        
+        <!-- FORMULARIO PARA AGREGAR NUEVOS EXPEDIENTES -->
+        <div class="form-captura">
+            <div class="form-group">
+                <label for="expediente">No. Expediente</label>
+                <input type="text" id="expediente" placeholder="Ej. 0452/2026">
+            </div>
+            <div class="form-group">
+                <label for="juzgado">Juzgado</label>
+                <input type="text" id="juzgado" placeholder="Ej. 2° de lo Familiar">
+            </div>
+            <div class="form-group">
+                <label for="estado">Estado Actual</label>
+                <select id="estado">
+                    <option value="Se dictó acuerdo">Se dictó acuerdo</option>
+                    <option value="Notificación por lista">Notificación por lista</option>
+                    <option value="Sentencia definitiva">Sentencia definitiva</option>
+                    <option value="En revisión">En revisión</option>
+                </select>
+            </div>
+            <button class="btn-agregar" onclick="agregarExpediente()">Registrar Caso 💾</button>
+        </div>
+
+        <!-- TABLA DE EXPOSICIÓN -->
+        <table>
+            <thead>
+                <tr>
+                    <th>No. Expediente</th>
+                    <th>Juzgado</th>
+                    <th>Última Actualización</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo-tabla">
+                <!-- Las filas nuevas se inyectarán aquí automáticamente -->
+                <tr>
+                    <td>1245/2026</td>
+                    <td>1° de lo Familiar</td>
+                    <td>04/10/2026, 10:15 PM</td>
+                    <td>Se dictó acuerdo</td>
+                    <td><button class="btn-ver" onclick="alert('Abriendo acuerdo en PDF...')">Ver Acuerdo PDF</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PROGRAMACIÓN DE LA LÓGICA (JAVASCRIPT) -->
+    <script>
+        function agregarExpediente() {
+            // 1. Atrapar los textos que escribió el abogado en los campos
+            const numeroExp = document.getElementById('expediente').value;
+            const nombreJuzgado = document.getElementById('juzgado').value;
+            const estadoActual = document.getElementById('estado').value;
+            
+            // Validación básica para no registrar campos vacíos
+            if(numeroExp === '' || nombreJuzgado === '') {
+                alert('Por favor, rellena todos los campos antes de registrar.');
+                return;
+            }
+            
+            // 2. Obtener la fecha y hora exacta de la iMac en este instante
+            const fechaHora = new Date().toLocaleString();
+            
+            // 3. Localizar la tabla en la pantalla
+            const tabla = document.getElementById('cuerpo-tabla');
+            
+            // 4. Crear la estructura de la nueva fila usando HTML desde JavaScript
+            const nuevaFila = document.createElement('tr');
+            nuevaFila.innerHTML = `
+                <td>${numeroExp}</td>
+                <td>${nombreJuzgado}</td>
+                <td>${fechaHora}</td>
+                <td>${estadoActual}</td>
+                <td><button class="btn-ver" onclick="alert('Abriendo acuerdo en PDF...')">Ver Acuerdo PDF</button></td>
+            `;
+            
+            // 5. Inyectar la nueva fila al principio de la tabla
+            tabla.insertBefore(nuevaFila, tabla.firstChild);
+            
+            // 6. Limpiar los campos para poder escribir el siguiente caso
+            document.getElementById('expediente').value = '';
+            document.getElementById('juzgado').value = '';
+        }
+    </script>
+
+</body>
+</html>
